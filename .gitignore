@@ -1,0 +1,12 @@
+.claude/
+
+# Superseded resume drafts — only assets/resume.pdf (the one index.html links to) is committed
+assets/Jimin_Gu_Resume__July.pdf
+assets/Jimin Gu_Resume_Mech_E_Sep.pdf
+
+# Raw source footage — only the compressed web-ready demo videos are committed
+assets/videos/*
+!assets/videos/hero-reel.mp4
+!assets/videos/pressure-sensor-demo.mp4
+!assets/videos/kirigami-stretch-demo.mp4
+!assets/videos/oasis-system-overview.mp4

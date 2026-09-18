@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jimin Gu — Wearable Sensor &amp; Process Development Engineer</title>
+<!--
+  ============================================================
+  EDIT GUIDE (한글)
+  ============================================================
+  1) 영상 교체: <video> 태그의 <source src="..."> 경로를 실제 데모 영상
+     파일 경로로 바꿔주세요 (예: assets/videos/hero-reel.mp4).
+     영상이 없다면 poster 이미지만 남겨도 자연스럽게 보입니다.
+  2) 링크 교체: RESUME_URL, LINKEDIN_URL, EMAIL 을 실제 값으로 바꿔주세요
+     (Ctrl+F 로 검색).
+  3) 논문 리스트: <!-- PUB --> 로 표시된 항목들을 실제 논문 정보로 채워주세요.
+  4) 프로필 사진: .about-photo 안의 이미지 소스를 교체하세요.
+  ============================================================
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EEF0EE;
+    --bg-panel:#E3E6E3;
+    --bg-panel-dark:#1B211F;
+    --ink:#151A18;
+    --ink-soft:#54615B;
+    --steel:#3C4A47;
+    --line:#C7CCC7;
+    --accent:#E0530C;
+    --accent-ink:#B3410A;
+    --accent-tint:#FCE3D3;
+    --paper:#F7F8F6;
+    --radius:2px;
+    --display:'Space Grotesk', sans-serif;
+    --body:'IBM Plex Sans', sans-serif;
+    --mono:'IBM Plex Mono', monospace;
+    --maxw:1180px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:16px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{color:inherit;}
+  img,video{max-width:100%; display:block;}
+
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 32px;}
+  @media (max-width:640px){ .wrap{padding:0 20px;} }
+
+  /* ---------- fiducial corner marks : signature motif ---------- */
+  .fiducial-frame{position:relative;}
+  .fiducial-frame::before,
+  .fiducial-frame::after,
+  .fiducial-frame .fid-br,
+  .fiducial-frame .fid-bl{
+    content:"";
+    position:absolute;
+    width:14px; height:14px;
+    border:1.5px solid var(--accent);
+    opacity:.85;
+  }
+  .fiducial-frame::before{ top:-1px; left:-1px; border-right:none; border-bottom:none; }
+  .fiducial-frame::after{ top:-1px; right:-1px; border-left:none; border-bottom:none; }
+  .fiducial-frame .fid-bl{ position:absolute; bottom:-1px; left:-1px; border-right:none; border-top:none; }
+  .fiducial-frame .fid-br{ position:absolute; bottom:-1px; right:-1px; border-left:none; border-top:none; }
+
+  .coord-tag{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.04em;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- nav ---------- */
+  header.nav{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    background:rgba(238,240,238,.86);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:var(--maxw); margin:0 auto; padding:16px 32px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .nav-mark{
+    font-family:var(--mono); font-size:13px; font-weight:500;
+    letter-spacing:.05em; text-decoration:none;
+    display:flex; align-items:center; gap:8px;
+  }
+  .nav-mark .dot{width:7px; height:7px; background:var(--accent); display:inline-block; border-radius:1px;}
+  .nav-links{display:flex; gap:28px; list-style:none; margin:0; padding:0;}
+  .nav-links a{
+    font-family:var(--mono); font-size:12px; letter-spacing:.06em;
+    text-decoration:none; color:var(--ink-soft); text-transform:uppercase;
+    border-bottom:1px solid transparent; padding-bottom:2px;
+    transition:color .15s, border-color .15s;
+  }
+  .nav-links a:hover{color:var(--ink); border-color:var(--accent);}
+  .nav-links{@media (max-width:720px){display:none;}}
+  @media (max-width:720px){ .nav-links{display:none;} }
+
+  /* ---------- section scaffolding ---------- */
+  section{padding:120px 0 40px;}
+  section:first-of-type{padding-top:170px;}
+  .section-head{
+    display:flex; align-items:baseline; gap:14px;
+    margin-bottom:44px; padding-bottom:14px; border-bottom:1px solid var(--line);
+  }
+  .section-num{font-family:var(--mono); font-size:12px; color:var(--accent-ink);}
+  .section-title{
+    font-family:var(--display); font-weight:600; font-size:26px;
+    letter-spacing:-.01em; margin:0;
+  }
+  .section-sub{
+    margin-left:auto; font-family:var(--mono); font-size:11px;
+    color:var(--ink-soft); text-align:right; max-width:260px;
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding-top:150px;
+    display:grid; grid-template-columns:1.05fr 1fr; gap:64px; align-items:center;
+  }
+  @media (max-width:900px){ .hero{grid-template-columns:1fr; gap:40px;} }
+
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; letter-spacing:.08em; color:var(--accent-ink);
+    text-transform:uppercase; margin:0 0 18px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:""; width:22px; height:1px; background:var(--accent-ink); display:inline-block;}
+
+  h1.name{
+    font-family:var(--display); font-weight:700;
+    font-size:clamp(40px, 6vw, 64px);
+    line-height:1.03; letter-spacing:-.015em; margin:0 0 10px;
+  }
+  .role{
+    font-family:var(--body); font-weight:500; font-size:19px;
+    color:var(--steel); margin:0 0 22px;
+  }
+  .value-prop{
+    font-size:16px; color:var(--ink-soft); max-width:46ch; margin:0 0 34px;
+  }
+  .cta-row{display:flex; flex-wrap:wrap; gap:12px;}
+  .btn{
+    font-family:var(--mono); font-size:12.5px; letter-spacing:.03em;
+    text-decoration:none; padding:12px 20px; border-radius:var(--radius);
+    display:inline-flex; align-items:center; gap:8px;
+    transition:transform .15s, background .15s, border-color .15s;
+  }
+  .btn-primary{background:var(--ink); color:var(--paper); border:1px solid var(--ink);}
+  .btn-primary:hover{background:var(--accent); border-color:var(--accent); transform:translateY(-1px);}
+  .btn-ghost{background:transparent; color:var(--ink); border:1px solid var(--line);}
+  .btn-ghost:hover{border-color:var(--ink); transform:translateY(-1px);}
+
+  .hero-media{position:relative; padding:18px;}
+  .hero-video{
+    position:relative; aspect-ratio:4/5; background:var(--bg-panel-dark);
+    overflow:hidden; border-radius:var(--radius);
+  }
+  .hero-video video{width:100%; height:100%; object-fit:cover; opacity:.92;}
+  .hero-video .scanline{
+    position:absolute; left:0; right:0; height:1px;
+    background:linear-gradient(90deg, transparent, var(--accent), transparent);
+    animation:scan 3.4s linear infinite; opacity:.7;
+  }
+  @keyframes scan{ 0%{top:2%;} 50%{top:96%;} 100%{top:2%;} }
+  .readout{
+    position:absolute; left:14px; bottom:14px;
+    font-family:var(--mono); font-size:10.5px; color:#DDEDE8;
+    background:rgba(0,0,0,.35); padding:5px 8px; border-radius:2px;
+    letter-spacing:.03em;
+  }
+  .readout-top{
+    position:absolute; right:14px; top:14px;
+    font-family:var(--mono); font-size:10px; color:#B9C9C3;
+    letter-spacing:.05em; text-transform:uppercase;
+  }
+
+  /* ---------- projects (compact horizontal cards) ---------- */
+  .proj-card{
+    display:grid; grid-template-columns:32% 1fr; gap:32px;
+    margin-bottom:80px; align-items:start;
+  }
+  .proj-card:last-child{margin-bottom:0;}
+  @media (max-width:760px){ .proj-card{grid-template-columns:1fr; gap:18px; margin-bottom:56px;} }
+
+  .proj-flag{
+    display:inline-flex; align-items:center; gap:7px;
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--accent-ink); background:var(--accent-tint); padding:4px 10px; border-radius:20px;
+    margin-bottom:12px;
+  }
+  .proj-flag .dot{width:6px; height:6px; background:var(--accent-ink); border-radius:50%; display:inline-block;}
+
+  /* compact media thumbnail — fixed height, 30-35% of card width via grid column */
+  .proj-card-media{
+    position:relative; height:200px; background:var(--bg-panel-dark); overflow:hidden;
+  }
+  @media (max-width:760px){ .proj-card-media{height:180px;} }
+  .proj-card-media video, .proj-card-media img, .proj-card-media .fallback{
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
+  .proj-card-media .fallback{
+    display:flex; align-items:center; justify-content:center;
+    background:repeating-linear-gradient(45deg, #23302C 0 2px, transparent 2px 10px);
+  }
+  .play-icon{
+    width:32px; height:32px; border-radius:50%; border:1.5px solid #E7ECE9;
+    display:flex; align-items:center; justify-content:center; color:#E7ECE9; font-size:11px;
+  }
+  .media-tag{
+    position:absolute; top:10px; left:10px; font-family:var(--mono); font-size:10px;
+    color:#E7ECE9; background:rgba(0,0,0,.4); padding:3px 7px; letter-spacing:.05em;
+  }
+
+  .proj-header{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:8px;}
+  .proj-code-lg{font-family:var(--mono); font-size:12px; color:var(--accent-ink); letter-spacing:.04em;}
+  .proj-title-lg{font-family:var(--display); font-weight:600; font-size:21px; margin:0; letter-spacing:-.01em;}
+  .proj-oneline{font-size:14.5px; color:var(--ink-soft); max-width:68ch; margin:0 0 18px;}
+
+  .proj-section{margin-bottom:16px;}
+  .proj-section h4{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--accent-ink); margin:0 0 6px;
+  }
+  .proj-section p{font-size:13.5px; color:var(--ink-soft); line-height:1.6; margin:0;}
+  .proj-section p strong{color:var(--ink);}
+
+  .tag-row{display:flex; flex-wrap:wrap; gap:7px;}
+  .tag{
+    font-family:var(--mono); font-size:10.5px; color:var(--steel);
+    border:1px solid var(--line); padding:4px 10px; border-radius:20px; background:var(--paper);
+  }
+
+  .validation-list{list-style:none; margin:0; padding:0; font-size:13px; color:var(--ink-soft);}
+  .validation-list li{
+    padding:5px 0 5px 14px; position:relative; border-bottom:1px dashed var(--line);
+  }
+  .validation-list li:last-child{border-bottom:none;}
+  .validation-list li::before{
+    content:"—"; position:absolute; left:0; color:var(--accent-ink);
+  }
+
+  .proj-divider{border:none; border-top:1px solid var(--line); margin:0 0 80px;}
+
+
+  /* ---------- capabilities ---------- */
+  .cap-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:var(--line); border:1px solid var(--line);}
+  @media (max-width:900px){ .cap-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:520px){ .cap-grid{grid-template-columns:1fr;} }
+  .cap-cell{background:var(--paper); padding:26px 20px; min-height:150px; display:flex; flex-direction:column; justify-content:space-between;}
+  .cap-code{font-family:var(--mono); font-size:11px; color:var(--accent-ink); letter-spacing:.05em;}
+  .cap-name{font-family:var(--display); font-weight:600; font-size:15.5px; margin:14px 0 8px;}
+  .cap-desc{font-size:12.5px; color:var(--ink-soft); line-height:1.5;}
+
+  /* ---------- about ---------- */
+  .about{display:grid; grid-template-columns:260px 1fr; gap:52px;}
+  @media (max-width:760px){ .about{grid-template-columns:1fr;} }
+  .about-photo{
+    aspect-ratio:4/5; background:var(--bg-panel);
+    overflow:hidden; border-radius:var(--radius);
+  }
+  .about-photo img{width:100%; height:100%; object-fit:cover;}
+  .about-copy p{font-size:15px; color:var(--ink-soft); max-width:62ch;}
+  .about-copy strong{color:var(--ink); font-weight:600;}
+  .stat-strip{display:flex; gap:36px; margin-top:26px; flex-wrap:wrap;}
+  .stat{font-family:var(--mono);}
+  .stat .num{font-size:22px; font-weight:500; color:var(--ink); display:block;}
+  .stat .lbl{font-size:10.5px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.05em;}
+
+  /* ---------- publications ---------- */
+  .pub-list{border-top:1px solid var(--line);}
+  .pub-row{
+    display:grid; grid-template-columns:70px 1fr 160px; gap:18px;
+    padding:18px 0; border-bottom:1px solid var(--line);
+    align-items:baseline;
+  }
+  @media (max-width:640px){ .pub-row{grid-template-columns:50px 1fr; } .pub-venue{display:none;} }
+  .pub-year{font-family:var(--mono); font-size:13px; color:var(--accent-ink);}
+  .pub-title{font-size:14.5px; color:var(--ink);}
+  .pub-venue{font-family:var(--mono); font-size:11.5px; color:var(--ink-soft); text-align:right;}
+
+  /* ---------- contact / footer ---------- */
+  .contact{
+    background:var(--bg-panel-dark); color:#E7ECE9; border-radius:var(--radius);
+    padding:56px 44px; display:flex; justify-content:space-between; align-items:flex-end; gap:32px; flex-wrap:wrap;
+  }
+  .contact h2{font-family:var(--display); font-size:30px; margin:0 0 10px; max-width:16ch;}
+  .contact p{color:#AEC0BA; font-size:14px; max-width:40ch; margin:0;}
+  .contact .cta-row .btn-ghost{border-color:#3C4A47; color:#E7ECE9;}
+  .contact .cta-row .btn-ghost:hover{border-color:#E7ECE9;}
+  .contact .cta-row .btn-primary{background:var(--accent); border-color:var(--accent);}
+
+  footer{padding:26px 0 60px;}
+  .foot-inner{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
+    font-family:var(--mono); font-size:11px; color:var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="#top" class="nav-mark"><span class="dot"></span>JIMIN GU</a>
+    <ul class="nav-links">
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#capabilities">Capabilities</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#papers">Publications</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ HERO ============ -->
+  <section id="top" class="hero">
+    <div>
+      <p class="eyebrow">Portfolio — Lab Bench to System</p>
+      <h1 class="name">Jimin Gu</h1>
+      <p class="role">Wearable Sensor &amp; Process Development Engineer</p>
+      <p class="value-prop">I develop wearable and flexible sensing systems from material selection and device design through fabrication, integration, and application-level validation. My work also extends into process development and instrumented manufacturing systems, including hardware–software integration, synchronized data acquisition, DOE, and computer-vision monitoring infrastructure.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="assets/resume.pdf" target="_blank" rel="noopener">Resume ↗</a>
+        <a class="btn btn-ghost" href="https://scholar.google.com/citations?user=fmR7AY0AAAAJ&hl=ko" target="_blank" rel="noopener">Google Scholar ↗</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/99jimingu/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a class="btn btn-ghost" href="mailto:mintpop10@gmail.com">Email</a>
+      </div>
+    </div>
+
+    <div class="hero-media">
+      <div class="hero-video fiducial-frame">
+        <span class="fid-bl"></span><span class="fid-br"></span>
+        <!-- Replace the source below with your best demo reel -->
+        <video autoplay muted loop playsinline poster="">
+          <source src="assets/videos/hero-reel.mp4" type="video/mp4">
+        </video>
+        <div class="scanline"></div>
+        <span class="readout-top">Demo reel — loop</span>
+        <span class="readout">REC · device-in-hand demo</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FEATURED PROJECTS ============ -->
+  <section id="projects">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Featured Projects</h2>
+      <span class="section-sub">Selected work — the engineering challenge, what I built, and how it was validated.</span>
+    </div>
+
+    <!-- ===== PROJECT 1 — Wearable Pressure Sensor (flagship) ===== -->
+    <article class="proj-card">
+      <div class="proj-card-media fiducial-frame">
+        <span class="fid-bl"></span><span class="fid-br"></span>
+        <span class="media-tag">Demo — device in use</span>
+        <video muted loop playsinline preload="none" onmouseover="this.play()" onmouseout="this.pause()">
+          <source src="assets/videos/pressure-sensor-demo.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="proj-card-body">
+        <div class="proj-header">
+          <span class="proj-code-lg">SEN-01</span>
+          <h3 class="proj-title-lg">Wearable Pressure Sensor</h3>
+        </div>
+        <p class="proj-oneline">Developed a MEMS microdome pressure sensor that remains sensitive while maintaining response under high loads, as part of an industry-partnered development program.</p>
+
+        <div class="proj-section">
+          <h4>Engineering Challenge</h4>
+          <p>Compliant structures respond well at low pressure but tend to saturate early, while stiffer structures sacrifice low-pressure resolution. The device also needed to remain durable and manufacturable within a cleanroom-compatible process.</p>
+        </div>
+        <div class="proj-section">
+          <h4>What I Did</h4>
+          <p>Designed and optimized the microdome geometry using contact mechanics and FEA to extend the working range while preserving low-pressure sensitivity. Developed and characterized the cleanroom fabrication process, including photolithography, isotropic RIE, and metal deposition, and established a stable process window for dome formation. Built a custom mechanical test setup and qualification workflow to evaluate sensitivity, range, hysteresis, durability, and environmental effects. During production scale-up, investigated anomalous sensor performance, traced the issue to a supplier-side fabrication defect, and implemented a design change that preserved the required performance.</p>
+        </div>
+        <div class="proj-section">
+          <h4>Skills Demonstrated</h4>
+          <div class="tag-row">
+            <span class="tag">MEMS device design</span>
+            <span class="tag">Contact-mechanics-driven geometry optimization</span>
+            <span class="tag">FEA study definition</span>
+            <span class="tag">Cleanroom microfabrication (photolithography, RIE, e-beam evaporation)</span>
+            <span class="tag">Process-window characterization</span>
+            <span class="tag">Custom test-fixture design</span>
+            <span class="tag">Root-cause defect investigation</span>
+            <span class="tag">Vendor / industry-partner collaboration</span>
+            <span class="tag">Technical documentation</span>
+          </div>
+        </div>
+        <div class="proj-section">
+          <h4>Validation / Outcome</h4>
+          <ul class="validation-list">
+            <li>3 MPa working range with 1,000-cycle durability</li>
+            <li>Multi-metric qualification: sensitivity, linearity, hysteresis, dynamic range, durability, noise, resolution, and temperature/humidity effects</li>
+            <li>Supplier-side defect resolved without compromising specification or schedule</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <hr class="proj-divider">
+
+    <!-- ===== PROJECT 2 — Flexible Strain / Kirigami Sensor ===== -->
+    <article class="proj-card">
+      <div class="proj-card-media fiducial-frame">
+        <span class="fid-bl"></span><span class="fid-br"></span>
+        <span class="media-tag">Demo — stretch / bend</span>
+        <video muted loop playsinline preload="none" onmouseover="this.play()" onmouseout="this.pause()">
+          <source src="assets/videos/kirigami-stretch-demo.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="proj-card-body">
+        <div class="proj-header">
+          <span class="proj-code-lg">SEN-02</span>
+          <h3 class="proj-title-lg">Auxetic / Kirigami Optical Strain Sensor</h3>
+        </div>
+        <p class="proj-oneline">Developed a wearable optical strain-sensing platform using auxetic and kirigami structures to improve strain uniformity, sensitivity, and working range.</p>
+
+        <div class="proj-section">
+          <h4>Engineering Challenge</h4>
+          <p>Wearable strain sensors need to maintain sensitivity over large deformation while remaining compliant and compact. Conventional structures often develop localized strain, limiting usable range and signal consistency.</p>
+        </div>
+        <div class="proj-section">
+          <h4>What I Did</h4>
+          <p>Designed auxetic and kirigami geometries in SolidWorks to control strain distribution and optical response under mechanical, fabrication, and form-factor constraints. Integrated the sensor with readout electronics, BLE communication, and a mobile interface across multiple prototype generations. Extended the design to kirigami structures for larger strain range and supported later collaborative model-driven optimization of the geometry. Led a Unity-based AR demonstration for real-time motion visualization.</p>
+        </div>
+        <div class="proj-section">
+          <h4>Skills Demonstrated</h4>
+          <div class="tag-row">
+            <span class="tag">Wearable sensor design</span>
+            <span class="tag">Auxetic / kirigami structures</span>
+            <span class="tag">Optomechanical sensing</span>
+            <span class="tag">SolidWorks</span>
+            <span class="tag">Prototype integration</span>
+            <span class="tag">BLE sensor systems</span>
+            <span class="tag">Readout electronics</span>
+            <span class="tag">System-level design</span>
+            <span class="tag">AR / Unity demonstration</span>
+          </div>
+        </div>
+        <div class="proj-section">
+          <h4>Validation / Outcome</h4>
+          <ul class="validation-list">
+            <li>Achieved a 0–80% strain working range using kirigami structural design</li>
+            <li>Improved strain-distribution uniformity through auxetic geometry</li>
+            <li>Demonstrated integrated sensing, wireless readout, and real-time motion visualization</li>
+            <li>Extended the platform from auxetic sensing to kirigami structures and subsequent collaborative model-driven optimization</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <hr class="proj-divider">
+
+    <!-- ===== PROJECT 3 — Instrumented Binder-Jet Platform ===== -->
+    <article class="proj-card">
+      <div class="proj-card-media fiducial-frame">
+        <span class="fid-bl"></span><span class="fid-br"></span>
+        <span class="media-tag">System overview</span>
+        <video muted loop playsinline preload="none" onmouseover="this.play()" onmouseout="this.pause()">
+          <source src="assets/videos/oasis-system-overview.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="proj-card-body">
+        <div class="proj-header">
+          <span class="proj-code-lg">SYS-01</span>
+          <h3 class="proj-title-lg">Instrumented Binder-Jet Platform</h3>
+        </div>
+        <p class="proj-oneline">Upgraded an unreliable custom binder-jet printer into a repeatable, instrumented platform for automated layer-wise experimentation.</p>
+
+        <div class="proj-section">
+          <h4>Engineering Challenge</h4>
+          <p>The existing platform suffered from intermittent build failures, unsynchronized image acquisition, and motion-related surface defects, making repeatable process studies difficult.</p>
+        </div>
+        <div class="proj-section">
+          <h4>What I Did</h4>
+          <p>Improved system reliability by debugging and integrating the motion, inkjet, imaging, and illumination subsystems through a Python-based control layer. Built an in-situ imaging system with synchronized layer-by-layer acquisition and calibration, and corrected motion-sequence issues that were introducing repeatable surface defects. Developed an automated parameter-study workflow with experiment logging, allowing repeatable DOE campaigns and consistent dataset generation.</p>
+        </div>
+        <div class="proj-section">
+          <h4>Skills Demonstrated</h4>
+          <div class="tag-row">
+            <span class="tag">System integration</span>
+            <span class="tag">Camera and illumination integration</span>
+            <span class="tag">Motion-control troubleshooting</span>
+            <span class="tag">Serial communication</span>
+            <span class="tag">Python automation</span>
+            <span class="tag">DOE workflow development</span>
+          </div>
+        </div>
+        <div class="proj-section">
+          <h4>Validation / Outcome</h4>
+          <ul class="validation-list">
+            <li>Improved reliability from approximately one-in-three successful batches to multi-hundred-layer builds</li>
+            <li>Eliminated recurring surface-streaking defects through motion-sequence correction</li>
+            <li>Generated consistent layer-synchronized image datasets for downstream analysis</li>
+            <li>Enabled independent operation by undergraduate researchers</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- ============ CORE CAPABILITIES ============ -->
+  <section id="capabilities">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Core Capabilities</h2>
+      <span class="section-sub">What it takes to get from a physical requirement to hardware you can trust the measurements from.</span>
+    </div>
+
+    <div class="cap-grid">
+      <div class="cap-cell">
+        <span class="cap-code">FAB</span>
+        <div>
+          <p class="cap-name">Microfabrication</p>
+          <p class="cap-desc">Cleanroom process work — photolithography, SF6-based isotropic RIE, e-beam evaporation, O2 plasma surface treatment, nano-transfer printing across five material systems.</p>
+        </div>
+      </div>
+      <div class="cap-cell">
+        <span class="cap-code">PROC</span>
+        <div>
+          <p class="cap-name">Process Development</p>
+          <p class="cap-desc">DOE design and process-window characterization: grouping parameters by governing physics, separating what can be controlled from what can only be characterized, and finding the limits where a process stops working.</p>
+        </div>
+      </div>
+      <div class="cap-cell">
+        <span class="cap-code">INST</span>
+        <div>
+          <p class="cap-name">Instrumentation &amp; Characterization</p>
+          <p class="cap-desc">Building the measurement before making the claim — custom test fixtures and optical benches designed from requirements through CNC fabrication and integration, then multi-metric qualification protocols run against them. SEM, EDS, confocal, FT-IR, UTM, DSC/TGA, laser Doppler vibrometry.</p>
+        </div>
+      </div>
+      <div class="cap-cell">
+        <span class="cap-code">DES</span>
+        <div>
+          <p class="cap-name">Device Design &amp; Simulation</p>
+          <p class="cap-desc">SolidWorks geometry design under fabrication and material constraints, with COMSOL and ANSYS FEA, FDTD optical modeling, and design-space search using global sensitivity analysis and multi-objective Bayesian optimization.</p>
+        </div>
+      </div>
+      <div class="cap-cell">
+        <span class="cap-code">SYS</span>
+        <div>
+          <p class="cap-name">Experimental System Integration</p>
+          <p class="cap-desc">Multi-subsystem hardware wired into one automated loop — motion control, actuation, camera, and illumination driven from host-side Python over serial, including the synchronization debugging that silent failures require.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section id="about" class="about">
+    <div>
+      <div class="about-photo"><img src="assets/images/profile1.jpg" alt="Jimin Gu"></div>
+    </div>
+    <div class="about-copy">
+      <div class="section-head" style="border:none; margin-bottom:20px; padding-bottom:0;">
+        <span class="section-num">03</span>
+        <h2 class="section-title">About</h2>
+      </div>
+      <p>I'm a systems integration engineer who builds intelligent physical systems by connecting hardware, software, sensing, and computer vision. My background is in mechanical engineering, sensor systems, and additive manufacturing, and I specialize in integrating physical equipment with software and data-driven monitoring tools to create functional manufacturing platforms.</p>
+      <p>A lot of my strongest work has started outside of what was formally assigned — prototyping things I thought were worth trying, seeing what worked and what didn't, and following the ones that held up. Right now, that means building the instrumented hardware and data platform — synchronized camera, illumination, and acquisition pipeline — that lets computer vision monitor a binder-jet printing process, laying the groundwork for future closed-loop, AI-driven process control.</p>
+      <p>My technical foundation is a <strong>PhD in Mechanical Engineering from KAIST</strong> and hands-on work across MEMS pressure sensors, CNT/elastomer flexible strain sensors, wearable systems, and piezoelectric metamaterials — including supporting an industry-partner development project with <strong>Samsung</strong> on vendor-facing troubleshooting and defect investigation. My toolset spans COMSOL/ANSYS FEA, SolidWorks, MATLAB/Python, LDV measurement, cleanroom microfabrication, and, more recently, Python-based systems development and computer vision integration.</p>
+      <p>In the long term, I want to bring AI-based decision-making and control into physical systems, particularly for autonomous closed-loop manufacturing.</p>
+      <div class="stat-strip">
+        <div class="stat"><span class="num">27</span><span class="lbl">Publications</span></div>
+        <div class="stat"><span class="num">2</span><span class="lbl">Institutions — KAIST · Berkeley</span></div>
+        <div class="stat"><span class="num">1</span><span class="lbl">Industry collab — Samsung</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SELECTED PUBLICATIONS ============ -->
+  <section id="papers">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Selected Publications</h2>
+      <span class="section-sub">27 peer-reviewed papers total — replace the rows below with your selected list.</span>
+    </div>
+
+    <div class="pub-list">
+      <div class="pub-row">
+        <span class="pub-year">2026</span>
+        <span class="pub-title">A Direction-Aware Piezo-Transmittance Strain Sensor via Engineered Alignment of Carbon Nanotubes (CNTs)</span>
+        <span class="pub-venue">Advanced Materials Technologies</span>
+      </div>
+      <div class="pub-row">
+        <span class="pub-year">2025</span>
+        <span class="pub-title">Thermoforming 2D films into 3D electronics for high-performance, customizable tactile sensing</span>
+        <span class="pub-venue">Science Advances 11 (20), eadv0057 — 16 citations</span>
+      </div>
+      <div class="pub-row">
+        <span class="pub-year">2024</span>
+        <span class="pub-title">Auxetic kirigami structure-based self-powered strain sensor with customizable performance using machine learning</span>
+        <span class="pub-venue">Nano Energy 130, 110124 — 34 citations</span>
+      </div>
+      <div class="pub-row">
+        <span class="pub-year">2021</span>
+        <span class="pub-title">Ultra-wide range pressure sensor based on a microstructured conductive nanocomposite for wearable workout monitoring</span>
+        <span class="pub-venue">Advanced Healthcare Materials 10 (9), 2001461 — 77 citations</span>
+      </div>
+      <div class="pub-row">
+        <span class="pub-year">—</span>
+        <span class="pub-title" style="color:var(--ink-soft);">+ 23 more — full list on Google Scholar</span>
+        <span class="pub-venue"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact">
+    <div class="contact fiducial-frame">
+      <span class="fid-bl"></span><span class="fid-br"></span>
+      <div>
+        <h2>Let's talk hardware.</h2>
+        <p>Open to wearable sensor and process/manufacturing engineering roles — happy to walk through any project in more depth.</p>
+      </div>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="mailto:mintpop10@gmail.com">Email me</a>
+        <a class="btn btn-ghost" href="assets/resume.pdf" target="_blank" rel="noopener">Resume ↗</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/99jimingu/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <span>© <span id="year"></span> Jimin Gu</span>
+    <span>Built for GitHub Pages — single file, no build step</span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
